@@ -2267,7 +2267,7 @@ class MaskRCNN(object):
         self.checkpoint_path = os.path.join(self.log_dir, "mask_rcnn_{}_*epoch*.h5".format(
             self.config.NAME.lower()))
         self.checkpoint_path = self.checkpoint_path.replace(
-            "*epoch*", "{epoch:04d}")
+            "*epoch*", "{epoch:02d}")
 
     def train(self, train_dataset, val_dataset, learning_rate, epochs, layers,
               augmentation=None, custom_callbacks=None, no_augmentation_sources=None):
@@ -2333,7 +2333,7 @@ class MaskRCNN(object):
             keras.callbacks.TensorBoard(log_dir=self.log_dir,
                                         histogram_freq=0, write_graph=True, write_images=False),
             keras.callbacks.ModelCheckpoint(self.checkpoint_path,
-                                            verbose=0, save_weights_only=True),
+                                            verbose=0, save_weights_only=True,save_freq= 'epoch'),
         ]
 
         # Add custom callbacks to the list
