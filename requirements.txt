@@ -9,4 +9,4 @@ opencv-python
 h5py
 imgaug
 IPython[all]
-Keras==2.2.2
+
