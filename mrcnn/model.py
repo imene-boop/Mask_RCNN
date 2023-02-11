@@ -83,7 +83,8 @@ def compute_backbone_shapes(config, image_shape):
         [[int(math.ceil(image_shape[0] / stride)),
             int(math.ceil(image_shape[1] / stride))]
             for stride in config.BACKBONE_STRIDES])
-
+def relu6(x):
+    return K.relu(x, max_value=6)
 
 ############################################################
 #  Resnet Graph
