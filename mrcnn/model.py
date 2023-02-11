@@ -78,7 +78,7 @@ def compute_backbone_shapes(config, image_shape):
         return config.COMPUTE_BACKBONE_SHAPE(image_shape)
 
     # Currently supports ResNet only
-    assert config.BACKBONE in ["resnet50", "resnet101"]
+    assert config.BACKBONE in ["resnet50", "resnet101","mobilenet224v1"]
     return np.array(
         [[int(math.ceil(image_shape[0] / stride)),
             int(math.ceil(image_shape[1] / stride))]
@@ -2249,9 +2249,9 @@ class MaskRCNN(object):
         # Bottom-up Layers
         # Returns a list of the last layers of each stage, 5 in total.
         # Don't create the thead (stage 5), so we pick the 4th item in the list.
-        if callable(config.BACKBONE):
-            _, C2, C3, C4, C5 = config.BACKBONE(input_image, stage5=True,
-                                                train_bn=config.TRAIN_BN)
+        if config.BACKBONE in ["mobilenet224v1"]:
+            _, C2, C3, C4, C5 = mobilenet_graph(input_image, config.BACKBONE, 
+                                                alpha=1.0, train_bn=config.TRAIN_BN)
         else:
             _, C2, C3, C4, C5 = resnet_graph(input_image, config.BACKBONE,
                                              stage5=True, train_bn=config.TRAIN_BN)
@@ -3152,11 +3152,27 @@ def mold_image(images, config):
     the mean pixel and converts it to float. Expects image
     colors in RGB order.
     """
+    mold_image_dict = { 
+#            "resnet50": resnet_mold_image,
+#           "resnet101": resnet_mold_image,
+            "mobilenet224v1": mobilenet_mold_image
+    }
+    
+    if config.BACKBONE not in mold_image_dict:
+        return resnet_mold_image(images, config)
     return images.astype(np.float32) - config.MEAN_PIXEL
 
 
 def unmold_image(normalized_images, config):
     """Takes a image normalized with mold() and returns the original."""
+    unmold_image_dict = {
+#            "resnet50": resnet_unmold_image,
+ #           "resnet101": resnet_unmold_image,
+            "mobilenet224v1": mobilenet_unmold_image
+    }
+
+    if config.BACKBONE not in unmold_image_dict:
+        return resnet_unmold_image(images, config)
     return (normalized_images + config.MEAN_PIXEL).astype(np.uint8)
 
 
