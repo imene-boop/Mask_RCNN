@@ -3180,7 +3180,16 @@ def unmold_image(normalized_images, config):
     if config.BACKBONE not in unmold_image_dict:
         return resnet_unmold_image(images, config)
     return (normalized_images + config.MEAN_PIXEL).astype(np.uint8)
+def mobilenet_mold_image(images, config):
+    """Expects an RGB image (or array of images) and normalizes by 
+    dividing by the median pixel value and subtracting 1 
+    """
+    return images.astype(np.float32)/127.5 - 1.0
 
+
+def mobilenet_unmold_image(normalized_images, config):
+    """Takes a image normalized with mobilenet_mold() and returns the original."""
+    return ((normalized_images + 1)*127.5).astype(np.uint8)
 
 ############################################################
 #  Miscellenous Graph Functions
