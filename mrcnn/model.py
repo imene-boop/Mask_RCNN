@@ -19,6 +19,11 @@ import tensorflow.keras as keras
 import tensorflow.keras.backend as K
 import tensorflow.keras.layers as KL
 import tensorflow.keras.utils as KU
+import tensorflow.keras.initializers as KI
+import tensorflow.keras.regularizers as KR
+import tensorflow.keras.constraints as KC
+from tensorflow.keras.layers import InputSpec
+import tensorflow.keras.utils as conv_utils
 from tensorflow.python.eager import context
 import tensorflow.keras.models as KM
 
