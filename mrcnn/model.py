@@ -3159,27 +3159,23 @@ def mold_image(images, config):
     colors in RGB order.
     """
     mold_image_dict = { 
-#            "resnet50": resnet_mold_image,
-#           "resnet101": resnet_mold_image,
             "mobilenet224v1": mobilenet_mold_image
     }
     
     if config.BACKBONE not in mold_image_dict:
-        return resnet_mold_image(images, config)
-    return images.astype(np.float32) - config.MEAN_PIXEL
+        return images.astype(np.float32) - config.MEAN_PIXEL
+    return mold_image_dict[config.BACKBONE](images, config)
 
 
 def unmold_image(normalized_images, config):
     """Takes a image normalized with mold() and returns the original."""
     unmold_image_dict = {
-#            "resnet50": resnet_unmold_image,
- #           "resnet101": resnet_unmold_image,
             "mobilenet224v1": mobilenet_unmold_image
     }
 
     if config.BACKBONE not in unmold_image_dict:
-        return resnet_unmold_image(images, config)
-    return (normalized_images + config.MEAN_PIXEL).astype(np.uint8)
+        return return (normalized_images + config.MEAN_PIXEL).astype(np.uint8)
+    return unmold_image_dict[config.BACKBONE](images, config)
 def mobilenet_mold_image(images, config):
     """Expects an RGB image (or array of images) and normalizes by 
     dividing by the median pixel value and subtracting 1 
