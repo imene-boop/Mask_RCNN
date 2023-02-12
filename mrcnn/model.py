@@ -3174,7 +3174,7 @@ def unmold_image(normalized_images, config):
     }
 
     if config.BACKBONE not in unmold_image_dict:
-        return return (normalized_images + config.MEAN_PIXEL).astype(np.uint8)
+        return (normalized_images + config.MEAN_PIXEL).astype(np.uint8)
     return unmold_image_dict[config.BACKBONE](images, config)
 def mobilenet_mold_image(images, config):
     """Expects an RGB image (or array of images) and normalizes by 
